@@ -7,6 +7,7 @@ from colorama import Fore as color
 from colorama import init
 from dotenv import load_dotenv
 from supabase import Client, create_client
+import time as tm
 
 load_dotenv()
 init(autoreset=True)
@@ -28,7 +29,7 @@ TABLAS = [
 
 
 def resumen() -> None:
-    print(f"Conectado a {SUPABASE_URL}\n")
+    # print(f"Conectado a {SUPABASE_URL}\n")
     for tabla in TABLAS:
         resp = supabase.table(tabla).select("*", count="exact").limit(0).execute()
         print(f"  {tabla:16} filas={resp.count}")
@@ -65,6 +66,7 @@ def tabla_bonita(filas: list[dict], titulo: str = "") -> None:
     print(color.CYAN + linea("├", "┼", "┤"))
     for f in filas:
         print(color.GREEN + fila_txt([celda(f.get(c)) for c in columnas]))
+        tm.sleep(0.003)
     print(color.CYAN + linea("└", "┴", "┘"))
     print(color.WHITE + f"  {len(filas)} fila(s)")
 
