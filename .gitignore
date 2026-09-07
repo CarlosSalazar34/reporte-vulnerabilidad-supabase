@@ -1,0 +1,18 @@
+# Nunca subir credenciales
+.env
+.env.*
+!.env.example
+*.key
+secrets*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Sistema
+.DS_Store
+
+# Capturas con credenciales visibles (revisar antes de incluir)
+evidencias/*-privado*
