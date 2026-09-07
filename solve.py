@@ -3,10 +3,13 @@
 
 import os
 
+from colorama import Fore as color
+from colorama import init
 from dotenv import load_dotenv
 from supabase import Client, create_client
 
 load_dotenv()
+init(autoreset=True)
 
 SUPABASE_URL = os.environ["SUPABASE_URL"]
 SUPABASE_KEY = os.environ["SUPABASE_KEY"]
@@ -31,9 +34,43 @@ def resumen() -> None:
         print(f"  {tabla:16} filas={resp.count}")
 
 
+def tabla_bonita(filas: list[dict], titulo: str = "") -> None:
+    """Imprime una lista de dicts como una tabla con bordes Unicode."""
+    if not filas:
+        print(color.YELLOW + "  (sin datos)")
+        return
+
+    # Columnas en el orden en que aparecen en la primera fila
+    columnas = list(filas[0].keys())
+
+    def celda(v) -> str:
+        return "" if v is None else str(v)
+
+    # Ancho de cada columna = max(encabezado, valores)
+    anchos = {
+        c: max(len(c), *(len(celda(f.get(c))) for f in filas)) for c in columnas
+    }
+
+    def linea(izq: str, med: str, der: str) -> str:
+        return izq + med.join("─" * (anchos[c] + 2) for c in columnas) + der
+
+    def fila_txt(valores) -> str:
+        return "│" + "│".join(f" {v:<{anchos[c]}} " for c, v in zip(columnas, valores)) + "│"
+
+    if titulo:
+        print(color.CYAN + f"\n{titulo}")
+
+    print(color.CYAN + linea("┌", "┬", "┐"))
+    print(color.CYAN + fila_txt(columnas))
+    print(color.CYAN + linea("├", "┼", "┤"))
+    for f in filas:
+        print(color.GREEN + fila_txt([celda(f.get(c)) for c in columnas]))
+    print(color.CYAN + linea("└", "┴", "┘"))
+    print(color.WHITE + f"  {len(filas)} fila(s)")
+
+
 if __name__ == "__main__":
     resumen()
 
-    est = supabase.table("estudiante").select("est_nombre, est_promedio").execute()
-    for fila in est.data:
-        print(fila)
+    est = supabase.table("estudiante").select("*").execute()
+    tabla_bonita(est.data, titulo="Tabla: estudiante")
