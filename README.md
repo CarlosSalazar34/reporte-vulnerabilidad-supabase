@@ -8,6 +8,12 @@ personales de estudiantes, y cómo remediarlo.
 > corrección. Los datos personales del informe están **enmascarados**. No se modificó
 > ni se exfiltró información.
 
+## Sistema evaluado
+
+Proceso de inscripciones de Ingeniería Informática — Escuela de Ingeniería
+Informática, UCAB (Caracas):
+<https://ingenieria.ucab.edu.ve/informatica/la-escuela/caracas/procesos-academicos/ingenieria-informatica/inscripciones/>
+
 ## Contenido
 
 | Archivo | Descripción |
